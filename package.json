@@ -1,0 +1,19 @@
+{
+  "name": "flexible-json-patch",
+  "version": "1.0.0",
+  "description": "容错 JSON Patch 解析器 —— 最大限度容忍 AI 模型输出的格式偏差",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "files": ["src", "dist"],
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js --minify"
+  },
+  "dependencies": {
+    "json5": "^2.2.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0",
+    "typescript": "^5.4.0"
+  },
+  "license": "MIT"
+}
