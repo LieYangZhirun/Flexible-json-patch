@@ -103,6 +103,10 @@ export function parseInstructions(rawText: string): ParseResult {
     }
   }
 
+  // 步骤 2b：单引号升级（解析成功后、语义规范化前）
+  // AI 为避免引号冲突可能将值内双引号降级为单引号，此处升级回双引号
+  parsed = upgradeSingleQuotesInValues(parsed);
+
   // 步骤 4：语义规范化
   return normalizeInstructions(parsed);
 }
@@ -329,6 +333,33 @@ function normalizePath(path: string): string {
   // 去除末尾的 /
   result = result.replace(/\/+$/, '');
   return result;
+}
+
+// ═══════════════════════════════════════════
+//  步骤 2b：单引号升级
+// ═══════════════════════════════════════════
+
+/**
+ * 遍历解析后的对象树，将字符串值中 '...' 包裹的内容升级为 "..."
+ *
+ * 典型场景：AI 将 `"进化日"` 降级输出为 `'进化日'` 以避免 JSON 引号冲突。
+ * 解析成功后在此恢复原始标点。
+ */
+function upgradeSingleQuotesInValues(data: any): any {
+  if (typeof data === 'string') {
+    return data.replace(/'([^']+)'/g, '"$1"');
+  }
+  if (Array.isArray(data)) {
+    return data.map(item => upgradeSingleQuotesInValues(item));
+  }
+  if (typeof data === 'object' && data !== null) {
+    const result: Record<string, any> = {};
+    for (const [key, value] of Object.entries(data)) {
+      result[key] = upgradeSingleQuotesInValues(value);
+    }
+    return result;
+  }
+  return data;
 }
 
 // ═══════════════════════════════════════════
