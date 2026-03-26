@@ -6,7 +6,7 @@
   "types": "src/index.ts",
   "files": ["src", "dist"],
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js --minify --alias:json5=https://esm.sh/json5@2.2.3",
+    "build": "esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js --minify --alias:json5=https://testingcf.jsdelivr.net/npm/json5@2.2.3/+esm",
     "test": "vitest run",
     "test:watch": "vitest"
   },
